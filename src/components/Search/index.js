@@ -1,26 +1,32 @@
 import React, { useContext, useEffect, useState } from 'react';
+import axios from 'axios';
 import { SearchContext } from '../../hooks/SearchContext';
 import { SearchStyled } from './SearchStyled';
 export default function ImagesList() {
-	const { search, setSearch } = useContext(SearchContext);
+	const baseURL = 'https://api.unsplash.com/search/photos';
+	const clientId = 'iCxEwOp0QkggOnGU1XP7SRLNQArxL5pBV84YJAadDHQ';
+	const [search, setSearch] = useState('');
 	const [searchInput, setsearchInput] = useState('');
-	//get firebase post
+	const { searchobj, setSearchobj } = useContext(SearchContext);
+
 	useEffect(() => {
-		// declare the data fetching function
-		// const fetchData = async () => {
-		// 	const postsCol = collection(db, 'posts');
-		// 	const postSnapshot = await getDocs(postsCol);
-		// 	const postList = postSnapshot.docs.map(doc => ({
-		// 		id: doc.id,
-		// 		data: doc.data(),
-		// 	}));
-		// 	return postList;
-		// };
-		//call api to get post
-		// fetchData()
-		// 	.then(result => setSearchTerm([...result]))
-		// 	.catch(console.error);
-	}, []);
+		console.log(search, 'search');
+		axios
+			.get(`${baseURL}`, {
+				headers: {
+					Authorization: `Client-ID ${clientId}`,
+				},
+				params: {
+					query: search,
+				},
+			})
+			.then(response => {
+				if (response.data.total > 0) {
+					setSearchobj(...[response.data.results]);
+					console.log(searchobj);
+				}
+			});
+	}, [search]);
 
 	function handleChange(e) {
 		e.preventDefault();

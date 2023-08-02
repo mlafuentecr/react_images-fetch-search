@@ -5,8 +5,8 @@ import ImagesList from './components/ImagesList';
 import Search from './components/Search';
 
 function App() {
-	const [search, setSearch] = useState('');
-	const SearchState = { search, setSearch };
+	const [searchobj, setSearchobj] = useState('');
+	const SearchState = { searchobj, setSearchobj };
 
 	return (
 		<SearchContext.Provider value={SearchState}>
